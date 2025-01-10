@@ -2,6 +2,15 @@
 {% block home_status %}active{% endblock home_status %}
 {% load static %}
 {% block slider %}
+<div class="login-section">
+  {% if user.is_authenticated %}
+    <a href="{% url 'dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+  {% else %}
+    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+    <a href="{% url 'signup' %}" class="btn btn-secondary">Sign Up</a>
+  {% endif %}
+</div>
+
     <!-- slider section -->
     <section class="slider_section ">
       <div id="customCarousel1" class="carousel slide" data-ride="carousel">
@@ -12,16 +21,26 @@
                 <div class="col-md-7 col-lg-6 ">
                   <div class="detail-box">
                     <h1>
-                      Fast Food Restaurant
+                      Fast Food Cafe
                     </h1>
                     <p>
                       Doloremque, itaque aperiam facilis rerum, commodi, temporibus sapiente ad mollitia laborum quam quisquam esse error unde. Tempora ex doloremque, labore, sunt repellat dolore, iste magni quos nihil ducimus libero ipsam.
                     </p>
+                    {% if not user.is_authenticated %}
                     <div class="btn-box">
-                      <a href="" class="btn1">
-                        Order Now
+                      <a href="{% url "login" %}" class="btn1">
+                        User Login
                       </a>
                     </div>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="POST">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger btn-lg">
+                          <i class="bi bi-box-arrow-right"></i> Logout
+                      </button>
+                    </form>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -72,15 +91,17 @@
           </div>
           {% endcomment %}
         </div>
+        {% comment "" %}
         <div class="container">
           <ol class="carousel-indicators">
             <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-            {% comment "" %}
+            
             <li data-target="#customCarousel1" data-slide-to="1"></li>
             <li data-target="#customCarousel1" data-slide-to="2"></li>
-            {% endcomment %}
+            
           </ol>
         </div>
+        {% endcomment %}
       </div>
 
     </section>
@@ -960,67 +981,70 @@
 
 
 
-    <!-- book section -->
-    <section class="book_section layout_padding">
-      <div class="container">
-      <div class="heading_container">
-          <h2>
-          Book A Table
-          </h2>
-      </div>
-      <div class="row">
-          <div class="col-md-6">
-          <div class="form_container">
-              <form action="{% url "Book_Table" %}" method='POST'>{% csrf_token %}
-              <div>
-                  <input type="text" class="form-control" name="user_name" required placeholder="Your Name" />
-              </div>
-              <div>
-                  <input type="text" class="form-control" name="phone_number" required placeholder="Phone Number" />
-              </div>
-              <div>
-                  <input type="email" class="form-control" name="user_email" placeholder="Your Email" />
-              </div>
-              <div>
-                  <select class="form-control nice-select wide" required name="total_person">
-                  <option value="" disabled selected>
-                      How many persons?
-                  </option>
-                  <option value="2">
-                      2
-                  </option>
-                  <option value="3">
-                      3
-                  </option>
-                  <option value="4">
-                      4
-                  </option>
-                  <option value="5">
-                      5
-                  </option>
-                  </select>
-              </div>
-              <div>
-                  <input type="date" required name="booking_data" class="form-control">
-              </div>
-              <div class="btn_box">
-                  <button>
-                  Book Now
-                  </button>
-              </div>
-              </form>
-          </div>
-          </div>
-          <div class="col-md-6">
-          <div class="map_container ">
-              <div id="googleMap"></div>
-          </div>
-          </div>
-      </div>
-      </div>
-  </section>
-  <!-- end book section -->
+  <!-- book section -->
+  <section class="book_section layout_padding">
+    <div class="container">
+        {% if messages %}
+            <div class="alert alert-dismissible fade show" role="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+                
+            </div>
+        {% endif %}
+        
+        <div class="heading_container">
+            <h2>Book A Table</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form_container">
+                    <form action="{% url 'Book_Table' %}" method='POST'>{% csrf_token %}
+                        <div>
+                            <input type="text" class="form-control" name="user_name" required placeholder="Your Name" />
+                        </div>
+                        <div>
+                            <input type="text" class="form-control" name="Phone_number" required placeholder="Phone Number" />
+                        </div>
+                        <div>
+                            <input type="email" class="form-control" name="Email" placeholder="Your Email" />
+                        </div>
+                        <div>
+                            <select class="form-control nice-select wide" required name="Total_person">
+                                <option value="" disabled selected>How many persons?</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div>
+                            <input type="date" required name="booking_data" class="form-control">
+                        </div>
+                        <div class="btn_box">
+                            <button>Book Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="map_container "><div id="googleMap"></div></div>
+            </div>
+        </div>
 
+        <!-- Add the Dashboard Button -->
+        {% comment %} {% if user.is_authenticated %}
+        <div class="text-center mt-4">
+            <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">
+                Go to Dashboard
+            </a>
+        </div>
+        {% endif %} {% endcomment %}
+
+    </div>
+</section>
+<!-- end book section -->
+  
     <!-- client section -->
 
     <section class="client_section layout_padding-bottom">

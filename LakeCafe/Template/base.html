@@ -28,6 +28,7 @@
 
   <!-- Custom styles for this template -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  {% block extra_css %}{% endblock %}
   <!-- responsive style -->
   <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
 
@@ -150,7 +151,7 @@
     
     {% block slider %}{% endblock slider %}
   </div>
-
+  {% block content %}{% endblock content %}
  
   {% block main %}{% endblock main %}
 

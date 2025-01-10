@@ -1,6 +1,8 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
-# Create your models here.
+
 class ItemList(models.Model):
     Category_name = models.CharField(max_length=15)
     
@@ -29,12 +31,13 @@ class Feedback(models.Model):
     def __str__(self):
         return self.User_name
 
+    
 class BookTable(models.Model):
-    Name = models.CharField(max_length=15)
-    Phone_number =models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')  
+    Phone_number = models.IntegerField()
     Email = models.EmailField()
     Total_person = models.IntegerField()
-    Booking_date = models.DateField()
-    
+    booking_data = models.DateField()
+
     def __str__(self):
-        return self.Name
+        return f"Booking by {self.user.username} on {self.booking_data}"

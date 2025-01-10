@@ -19,15 +19,26 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from Base_App.views import *
+from Base_App import views
+
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LogoutView
+#from . import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',HomeView,name="Home"),
-    path('book_table',BookTableView,name="Book_Table"),
+    path('book_table/',BookTableView,name="Book_Table"),
     path('menu',MenuView,name="Menu"),
     path('about',AboutView,name="About"),
     path('feedback',FeedbackView,name="Feedback"),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    path('signup/', signup, name='signup'),
+    path('dashboard/', dashboard, name='dashboard'),
+    path('book_table_redirect/', views.book_table_redirect, name='book_table_redirect'),
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
